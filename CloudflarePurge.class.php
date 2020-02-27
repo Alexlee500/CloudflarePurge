@@ -1,4 +1,6 @@
 <?php
+	use MediaWiki\MediaWikiServices;
+
 	class CloudflarePurge{
 		public static function onSpecialUploadComplete( &$upload ){
 			$urls = array();
@@ -11,15 +13,37 @@
 				$urls[] = "$thumbPath/$u";
 			}	
 
-			purgeUrls( $urls );
+			self::purgeUrls( $urls );
+			return true;
 		}
 
-		private function purgeUrls( $urls ){	
+		private function purgeUrls( $urls ){
+			$config = MediaWikiServices::getInstance()->getMainConfig();
+			$wgCloudflareZoneID = $config->get('CloudflareZoneID');
+			$wgCloudflareApiToken = $config->get('CloudflareApiToken');
+			$wgCloudflareAccountID = $config->get('CloudflareAccountID');
+
 			$str = implode("\", \"", $urls);
 			$str = "{\"files\":[\"$str\"]}";
-
-
+			
 			$ch = curl_init();
-			throw new exception($str);	
+
+			curl_setopt($ch, CURLOPT_URL, "https://api.cloudflare.com/client/v4/zones/$wgCloudflareZoneID/purge_cache");
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $str);
+
+			$headers = array();
+			$headers[] = "X-Auth-Key: $wgCloudflareAccountID";
+			$headers[] = "Authorization: Bearer $wgCloudflareApiToken";
+			$headers[] = "Content-Type: application/json";
+
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			$result = curl_exec($ch);
+			if(curl_errno($ch)){
+				echo 'Error: ' . curl_error($ch);
+			}
+
+			curl_close($ch);
 		}
 	}
