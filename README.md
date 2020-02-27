@@ -1,0 +1,2 @@
+# CloudflarePurge
+MediaWiki Extension.
