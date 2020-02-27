@@ -1,0 +1,21 @@
+{
+	"name": "CloudflarePurge",
+	"author": "Alex Lee",
+	"description": "Purges Cloudflare cache on mediawiki article and file edits",
+	"version": "0.0",
+	"type": "other",
+	"AutoloadClasses":{
+		"CloudflarePurge": "CloudflarePurge.class.php"
+	},
+
+	"config": {
+		"wgCloudflareZoneID": "0000",
+		"wgCloudflareApiToken": "0000",
+		"wgCloudflareAccountID": "0000"
+	},
+
+	"Hooks": {
+		"SpecialUploadComplete": "CloudflarePurge::onSpecialUploadComplete"
+	},
+	"manifest_version": 2
+}
