@@ -17,6 +17,29 @@
 			return true;
 		}
 
+		public static function onPageContentSaveComplete( $wikiPage, $user, $mainContent, $summaryText, $isMinor, $isWatch, $section, &$flags, $revision, $status, $originalRevId, $undidRevId){
+			throw new exception ("ree");	
+		}
+		
+		public static function onNewRevisionFromEditComplete( $wikiPage, $rev, $baseID, $user ) {
+			$urls = array();
+			$urls[] = $wikiPage->getTitle()->getFullURL();
+			$urls[] = $wikiPage->getFile()->getURL();
+			$thumbPath = $wikiPage->getFile()->getThumbUrl();
+			$thumbs = $wikiPage->getFile()->getThumbnails();
+			unset($thumbs[0]);
+			foreach($thumbs as $u){
+				$urls[] = "$thumbPath/$u";
+			}
+			self::purgeUrls( $urls );
+
+			return true;
+		}
+
+		public static function onArticleUpdateBeforeRedirect($article, &$sectionanchor, &$extraq){
+			throw new exception("rererer");
+		}
+
 		private function purgeUrls( $urls ){
 			$config = MediaWikiServices::getInstance()->getMainConfig();
 			$wgCloudflareZoneID = $config->get('CloudflareZoneID');

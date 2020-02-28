@@ -15,7 +15,10 @@
 	},
 
 	"Hooks": {
-		"SpecialUploadComplete": "CloudflarePurge::onSpecialUploadComplete"
+		"PageContentSaveComplete": "CloudflarePurge::onPageContentSaveComplete",
+		"SpecialUploadComplete": "CloudflarePurge::onSpecialUploadComplete",
+		"NewRevisionFromEditComplete": "CloudflarePurge::onNewRevisionFromEditComplete",
+		"ArticleUpdateBeforeRedirect":"CloudflarePurge::onArticleUpdateBeforeRedirect"
 	},
 	"manifest_version": 2
 }
