@@ -24,12 +24,15 @@
 		public static function onNewRevisionFromEditComplete( $wikiPage, $rev, $baseID, $user ) {
 			$urls = array();
 			$urls[] = $wikiPage->getTitle()->getFullURL();
-			$urls[] = $wikiPage->getFile()->getURL();
-			$thumbPath = $wikiPage->getFile()->getThumbUrl();
-			$thumbs = $wikiPage->getFile()->getThumbnails();
-			unset($thumbs[0]);
-			foreach($thumbs as $u){
-				$urls[] = "$thumbPath/$u";
+
+			if(get_class($wikiPage) === "WikiFilePage"){	
+				$urls[] = $wikiPage->getFile()->getURL();
+				$thumbPath = $wikiPage->getFile()->getThumbUrl();
+				$thumbs = $wikiPage->getFile()->getThumbnails();
+				unset($thumbs[0]);
+				foreach($thumbs as $u){
+					$urls[] = "$thumbPath/$u";
+				}
 			}
 			self::purgeUrls( $urls );
 
