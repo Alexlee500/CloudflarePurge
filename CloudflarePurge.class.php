@@ -40,7 +40,11 @@
 		}
 
 		public static function onArticleUpdateBeforeRedirect($article, &$sectionanchor, &$extraq){
-			throw new exception("rererer");
+			return true;
+		}
+		
+		public static function onArticleViewRedirect( $article ){
+			throw new exception("reeeeeeeeeeeee");
 		}
 
 		private function purgeUrls( $urls ){
